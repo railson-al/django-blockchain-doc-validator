@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv, find_dotenv
+
+_ = load_dotenv(find_dotenv())
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -52,9 +55,18 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'app.urls'
+
+# URL configs
 LOGIN_REDIRECT_URL = 'home' 
 LOGOUT_REDIRECT_URL = 'home'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
+# ENV Variables
+
+INFURA_URL = os.getenv("INFURA_URL")
+CONTRACT_ADDRESS = os.getenv("CONTRACT_ADDRESS")
+WALLET_PRIVATE_KEY = os.getenv("WALLET_PRIVATE_KEY")
 
 TEMPLATES = [
     {

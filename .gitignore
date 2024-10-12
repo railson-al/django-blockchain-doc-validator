@@ -5,3 +5,4 @@ venv/
 app/*.sqlite3
 
 *.pyc
+node_modules

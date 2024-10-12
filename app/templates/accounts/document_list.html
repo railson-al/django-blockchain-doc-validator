@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto mt-10">
+    <h2 class="text-2xl font-bold mb-5">Seus Documentos</h2>
+    {% if documents %}
+        <ul class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        {% for document in documents %}
+            <li class="mb-4 pb-4 border-b last:border-b-0">
+                <h3 class="text-xl font-semibold">{{ document.title }}</h3>
+                <p class="text-gray-600">Enviado em: {{ document.uploaded_at|date:"d/m/Y H:i" }}</p>
+                <p class="text-sm text-gray-500">Hash: {{ document.blockchain_hash }}</p>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p class="text-gray-600">Você ainda não enviou nenhum documento.</p>
+    {% endif %}
+    <a href="{% url 'upload_document' %}" class="mt-4 inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        Enviar Novo Documento
+    </a>
+</div>
+{% endblock %}
