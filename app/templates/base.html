@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Sistema de Validação de Documentos Acadêmicos{% endblock title %}</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Estilos personalizados adicionais -->
+    {% block extra_css %}{% endblock extra_css %}
+</head>
+<body class="bg-gray-100 font-sans">
+    <!-- Cabeçalho -->
+    <header class="bg-blue-600 text-white shadow-md">
+        <nav class="container mx-auto px-6 py-3">
+            <div class="flex justify-between items-center">
+                <a href="{% url 'home' %}" class="text-2xl font-bold">DocValidate</a>
+                <div>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'home' %}" class="px-4 py-2 rounded hover:bg-blue-700">Dashboard</a>
+                        <a href="{% url 'logout' %}" class="px-4 py-2 rounded hover:bg-blue-700">Sair</a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="px-4 py-2 rounded hover:bg-blue-700">Entrar</a>
+                        <a href="{% url 'register' %}" class="px-4 py-2 bg-blue-500 rounded hover:bg-blue-600">Registrar</a>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Conteúdo principal -->
+    <main class="container mx-auto mt-6 px-4">
+        {% block content %}
+        <!-- O conteúdo específico de cada página será inserido aqui -->
+        {% endblock content %}
+    </main>
+
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="{% if message.tags %}{{ message.tags }}{% endif %} bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3" role="alert">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Rodapé -->
+    <footer class="bg-gray-200 mt-12">
+        <div class="container mx-auto px-6 py-4">
+            <p class="text-center text-gray-600">
+                &copy; {% now "Y" %} DocValidate. Todos os direitos reservados.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    {% block extra_js %}{% endblock extra_js %}
+</body>
+</html>
