@@ -1,6 +1,7 @@
 from web3 import Web3
 from django.conf import settings
 import json
+import os
 
 # Carregue as configurações do seu arquivo .env
 INFURA_URL = settings.INFURA_URL
@@ -10,11 +11,13 @@ WALLET_PRIVATE_KEY = settings.WALLET_PRIVATE_KEY
 # Inicialize a conexão Web3
 w3 = Web3(Web3.HTTPProvider(INFURA_URL))
 
+abi_path = os.path.join(settings.BASE_DIR, 'contracts', 'build', 'contracts', 'DocumentRegistry.json')
 # Carregue o ABI do seu contrato
-with open('path/to/your/contract/abi.json', 'r') as abi_file:
-    contract_abi = json.load(abi_file)
+with open(abi_path, 'r') as abi_file:
+    contract_json = json.load(abi_file)
 
 # Inicialize o contrato
+contract_abi = contract_json['abi']
 contract = w3.eth.contract(address=CONTRACT_ADDRESS, abi=contract_abi)
 
 def register_document(document_hash):

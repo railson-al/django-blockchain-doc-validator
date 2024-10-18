@@ -9,22 +9,25 @@ from .forms import UserRegistrationForm, DocumentUploadForm
 from .models import Document
 
 def index(request):
+    """Renderiza a página inicial."""
     return render(request, 'accounts/home.html', {})
 
 
 def register(request):
+    """Registra um novo usuário."""
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
             auth_login(request, user)
-            return redirect('home')  # Redireciona para a página inicial após o registro
+            return redirect('home')
     else:
         form = UserRegistrationForm()
     return render(request, 'accounts/register.html', {'form': form})
 
 
 def user_login(request):
+    """Autentica e loga um usuário."""
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
@@ -32,7 +35,7 @@ def user_login(request):
             password = form.cleaned_data.get('password')
             user = authenticate(username=username, password=password)
             if user is not None:
-                auth_login(request, user)  # Usando auth_login em vez de login
+                auth_login(request, user)
                 messages.success(request, f"Bem-vindo, {username}!")
                 return redirect('home')
             else:
@@ -45,56 +48,68 @@ def user_login(request):
 
 
 def user_logout(request):
+    """Desconecta o usuário."""
     auth_logout(request)
     messages.success(request, "Você foi desconectado com sucesso.")
-    return redirect('home')  # Substitua 'home' pelo nome da sua URL da página inicial
+    return redirect('home')
 
 
 @login_required
 def upload_document(request):
+    """Faz o upload de um documento e registra na blockchain."""
     if request.method == 'POST':
         form = DocumentUploadForm(request.POST, request.FILES)
         if form.is_valid():
             document = form.save(commit=False)
             document.user = request.user
             document.save()
-            
-            # Gerar hash do documento
-            file_hash = hashlib.sha256(document.file.read()).hexdigest()
-            
-            # Registrar na blockchain
-            tx_receipt = register_document(file_hash)
-            
-            # Salvar o hash da transação
-            document.blockchain_tx_hash = tx_receipt['transactionHash'].hex()
-            document.save()
 
-            messages.success(request, 'Documento enviado com sucesso e registrado na blockchain.')
+            # Gerar hash do documento
+            document.file.seek(0)  # Certifique-se de que o arquivo é lido desde o início
+            file_hash = hashlib.sha256(document.file.read()).hexdigest()
+
+            try:
+                # Registrar na blockchain
+                tx_receipt = register_document(file_hash)
+                
+                # Salvar o hash da transação
+                document.blockchain_tx_hash = tx_receipt['transactionHash'].hex()
+                document.save()
+
+                messages.success(request, 'Documento enviado com sucesso e registrado na blockchain.')
+            except Exception as e:
+                messages.error(request, f"Erro ao registrar documento na blockchain: {e}")
+            
             return redirect('document_list')
     else:
         form = DocumentUploadForm()
-    return render(request, 'app/upload_document.html', {'form': form})
+    return render(request, 'accounts/upload_document.html', {'form': form})
 
 
 @login_required
 def document_list(request):
+    """Lista os documentos do usuário."""
     documents = Document.objects.filter(user=request.user)
     return render(request, 'accounts/document_list.html', {'documents': documents})
 
 
 def verify_document_view(request):
+    """Verifica se um documento está registrado na blockchain."""
     if request.method == 'POST':
         uploaded_file = request.FILES.get('document')
         if uploaded_file:
-            # Calcular o hash do documento enviado
+            uploaded_file.seek(0)  # Certifique-se de que o arquivo é lido desde o início
             file_hash = hashlib.sha256(uploaded_file.read()).hexdigest()
-            
-            # Verificar o hash na blockchain
-            is_verified = verify_document(file_hash)
-            
+
+            try:
+                is_verified = verify_document(file_hash)
+                messages.success(request, 'Documento verificado com sucesso.' if is_verified else 'Documento não encontrado na blockchain.')
+            except Exception as e:
+                messages.error(request, f"Erro ao verificar documento na blockchain: {e}")
+
             return render(request, 'accounts/verify_document.html', {
                 'is_verified': is_verified,
                 'file_hash': file_hash
             })
     
-    return render(request, 'app/verify_document.html')
+    return render(request, 'accounts/verify_document.html')
