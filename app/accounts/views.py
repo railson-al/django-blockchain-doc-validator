@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login as auth_login, logout as aut
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from web3 import Web3
 import hashlib
 from .blockchain import register_document, verify_document
 from .forms import UserRegistrationForm, DocumentUploadForm
@@ -66,7 +67,9 @@ def upload_document(request):
 
             # Gerar hash do documento
             document.file.seek(0)  # Certifique-se de que o arquivo é lido desde o início
-            file_hash = hashlib.sha256(document.file.read()).hexdigest()
+            file_content = document.file.read()
+            file_hash = Web3.keccak(file_content).hex()
+            # print(f"Hash do arquivo: {file_hash}")
 
             try:
                 # Registrar na blockchain

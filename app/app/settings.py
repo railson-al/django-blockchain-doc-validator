@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 INFURA_URL = os.getenv("INFURA_URL")
 CONTRACT_ADDRESS = os.getenv("CONTRACT_ADDRESS")
-WALLET_PRIVATE_KEY = os.getenv("INFURA_API_KEY")
+WALLET_PRIVATE_KEY = os.getenv("WALLET_PRIVATE_KEY")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/

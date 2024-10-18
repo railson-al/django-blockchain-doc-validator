@@ -3,6 +3,7 @@ venv/
 .env
 
 app/*.sqlite3
+app/media/*
 
 *.pyc
 node_modules

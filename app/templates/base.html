@@ -31,13 +31,6 @@
         </nav>
     </header>
 
-    <!-- Conteúdo principal -->
-    <main class="container mx-auto mt-6 px-4">
-        {% block content %}
-        <!-- O conteúdo específico de cada página será inserido aqui -->
-        {% endblock content %}
-    </main>
-
     {% if messages %}
         <div class="messages">
             {% for message in messages %}
@@ -47,6 +40,13 @@
             {% endfor %}
         </div>
     {% endif %}
+    
+    <!-- Conteúdo principal -->
+    <main class="container mx-auto mt-6 px-4">
+        {% block content %}
+        <!-- O conteúdo específico de cada página será inserido aqui -->
+        {% endblock content %}
+    </main>
 
     <!-- Rodapé -->
     <footer class="bg-gray-200 mt-12">
