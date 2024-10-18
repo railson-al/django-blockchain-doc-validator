@@ -33,7 +33,7 @@ def register_document(document_hash):
     :param document_hash: O hash do documento a ser registrado (em formato hexadecimal)
     :return: O recibo da transação
     """
-    print('wallet_key', WALLET_PRIVATE_KEY)
+
     try:
         # Converta o hash para bytes32
         document_hash_bytes = bytes.fromhex(document_hash[2:])  # Remove '0x' do início se presente
