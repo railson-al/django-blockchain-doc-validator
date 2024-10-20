@@ -41,11 +41,12 @@ def register_document(document_hash):
 
         nonce = w3.eth.get_transaction_count(w3.eth.account.from_key(WALLET_PRIVATE_KEY).address)
         txn = contract.functions.registerDocument(document_hash_bytes).build_transaction({
-            'chainId': 4,  # 4 para Rinkeby, 1 para Mainnet
-            'gas': 2000000,
-            'gasPrice': w3.eth.gas_price,
-            'nonce': nonce,
-        })
+        'chainId': 1337,  # Chain ID do Ganache. Pode variar, confira no Ganache
+        'gas': 2000000,
+        'gasPrice': w3.eth.gas_price,
+        'nonce': nonce,
+        'from': w3.eth.account.from_key(WALLET_PRIVATE_KEY).address # Adicione o from
+    })
 
         signed_txn = w3.eth.account.sign_transaction(txn, private_key=WALLET_PRIVATE_KEY)
         tx_hash = w3.eth.send_raw_transaction(signed_txn.rawTransaction)

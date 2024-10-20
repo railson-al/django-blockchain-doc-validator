@@ -44,8 +44,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     }
   ],
   "metadata": "{\"compiler\":{\"version\":\"0.8.21+commit.d9974bed\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"documentHash\",\"type\":\"bytes32\"}],\"name\":\"DocumentRegistered\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"documentHash\",\"type\":\"bytes32\"}],\"name\":\"registerDocument\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"documentHash\",\"type\":\"bytes32\"}],\"name\":\"verifyDocument\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/DocumentRegistry.sol\":\"DocumentRegistry\"},\"evmVersion\":\"shanghai\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/DocumentRegistry.sol\":{\"keccak256\":\"0xe36de37abc8271ed241d0da506a7f52ce7a5e7a758b3bf97d801a52cc64340ee\",\"urls\":[\"bzz-raw://762da36adcd4dd559c3296cc1ae569c91ad82a086db8525495e9c747b3b23053\",\"dweb:/ipfs/QmSDtX7PLSwCFzFvBU8MRNnPYznobvSPDVoNFxphfVeHTF\"]}},\"version\":1}",
@@ -2045,8 +2044,7 @@
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2024-10-16T00:15:15.527Z",
-  "networkType": "ethereum",
+  "updatedAt": "2024-10-20T23:05:18.247Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},
