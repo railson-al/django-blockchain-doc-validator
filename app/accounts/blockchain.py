@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 # Carregue as configurações do seu arquivo .env
 INFURA_URL = settings.INFURA_URL
 CONTRACT_ADDRESS = settings.CONTRACT_ADDRESS
-WALLET_PRIVATE_KEY = settings.WALLET_PRIVATE_KEY
+WALLET_PRIVATE_KEY = '0x13797be67b3d91ce3c311861047bbe369d039fd9c731b4d23822bc1bc9dd6fe3'#settings.WALLET_PRIVATE_KEY
 
 
 # Inicialize a conexão Web3
@@ -26,6 +26,14 @@ with open(abi_path, 'r') as abi_file:
 contract_abi = contract_json['abi']
 contract = w3.eth.contract(address=CONTRACT_ADDRESS, abi=contract_abi)
 
+
+def check_balance():
+    address = w3.eth.account.from_key(WALLET_PRIVATE_KEY).address
+    balance = w3.eth.get_balance(address)
+    print(f"Saldo da conta: {Web3.from_wei(balance, 'ether')} ETH - Address {address}")
+
+
+
 def register_document(document_hash):
     """
     Registra um documento na blockchain.
@@ -33,24 +41,25 @@ def register_document(document_hash):
     :param document_hash: O hash do documento a ser registrado (em formato hexadecimal)
     :return: O recibo da transação
     """
-
     try:
         # Converta o hash para bytes32
-        document_hash_bytes = bytes.fromhex(document_hash[2:])  # Remove '0x' do início se presente
+        document_hash_bytes = bytes.fromhex(document_hash).rjust(32, b'\0')
         # print(document_hash_bytes)
 
         nonce = w3.eth.get_transaction_count(w3.eth.account.from_key(WALLET_PRIVATE_KEY).address)
+        check_balance()
         txn = contract.functions.registerDocument(document_hash_bytes).build_transaction({
-        'chainId': 1337,  # Chain ID do Ganache. Pode variar, confira no Ganache
-        'gas': 2000000,
-        'gasPrice': w3.eth.gas_price,
-        'nonce': nonce,
-        'from': w3.eth.account.from_key(WALLET_PRIVATE_KEY).address # Adicione o from
-    })
+            'chainId': 1337,  # Chain ID do Ganache. Pode variar, confira no Ganache
+            'gas': 2000000, #2000000,
+            'gasPrice': w3.eth.gas_price,
+            'nonce': nonce,
+            'from': w3.eth.account.from_key(WALLET_PRIVATE_KEY).address
+        })
 
         signed_txn = w3.eth.account.sign_transaction(txn, private_key=WALLET_PRIVATE_KEY)
-        tx_hash = w3.eth.send_raw_transaction(signed_txn.rawTransaction)
+        tx_hash = w3.eth.send_raw_transaction(signed_txn.raw_transaction)
         tx_receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
+        print(tx_receipt)
 
         return tx_receipt
     except Exception as e:

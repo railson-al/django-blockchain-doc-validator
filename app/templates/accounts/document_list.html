@@ -9,7 +9,7 @@
             <li class="mb-4 pb-4 border-b last:border-b-0">
                 <h3 class="text-xl font-semibold">{{ document.title }}</h3>
                 <p class="text-gray-600">Enviado em: {{ document.uploaded_at|date:"d/m/Y H:i" }}</p>
-                <p class="text-sm text-gray-500">Hash: {{ document.blockchain_hash }}</p>
+                <p class="text-sm text-gray-500">Hash: {{ document.blockchain_tx_hash }}</p>
             </li>
         {% endfor %}
         </ul>

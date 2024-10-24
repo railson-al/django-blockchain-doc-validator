@@ -97,16 +97,18 @@ module.exports = {
     //   production: true    // Treats this network as if it was a public net. (default: false)
     // }
     development: {
-      host: "127.0.0.1",     // Localhost (default: none)
-      port: 7545,            // Standard Ethereum port (default: none)
-      network_id: 5777,       // Ganache network id
+      host: "127.0.0.1",
+      port: 7545,
+      network_id: 5777,
+      gas: 6721975,  // Aumente se necessário
+      gasPrice: 2000000000,  // 20 gwei
     },
-    rinkeby: {
-      provider: () => new HDWalletProvider(MNEMONIC, `https://rinkeby.infura.io/v3/${INFURA_API_KEY}`),
-      network_id: 4,       // Rinkeby's id
-      gas: 4500000,        // Rinkeby has a lower block limit than mainnet
-      gasPrice: 10000000000
-    },
+    // rinkeby: {
+    //   provider: () => new HDWalletProvider(MNEMONIC, `https://rinkeby.infura.io/v3/${INFURA_API_KEY}`),
+    //   network_id: 4,       // Rinkeby's id
+    //   gas: 4500000,        // Rinkeby has a lower block limit than mainnet
+    //   gasPrice: 10000000000
+    // },
   },
 
   // Set default mocha options here, use special reporters, etc.
